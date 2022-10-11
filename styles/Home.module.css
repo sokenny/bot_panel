@@ -1,129 +1,149 @@
-.container {
-  padding: 0 2rem;
-}
-
-.main {
-  min-height: 100vh;
-  padding: 4rem 0;
-  flex: 1;
+.main{
+  padding: 0 25vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.footer {
-  display: flex;
-  flex: 1;
-  padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
-  justify-content: center;
-  align-items: center;
+.main section{
+  width: 100%;
 }
 
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-}
-
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
-.description {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
-.code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-.grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 800px;
-}
-
-.card {
-  margin: 1rem;
-  padding: 1.5rem;
+.status{
   text-align: left;
-  color: inherit;
-  text-decoration: none;
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 300px;
+  display: flex;
+  width: 100%;
+  font-size: 10px;
+  padding: 10px 0;
 }
 
-.card:hover,
-.card:focus,
-.card:active {
-  color: #0070f3;
-  border-color: #0070f3;
+.status>div:last-child{
+  margin-left: 8px;
+  color: greenyellow;
 }
 
-.card h2 {
-  margin: 0 0 1rem 0;
-  font-size: 1.5rem;
+.main>section>div:first-child{
+  display: flex;
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-.card p {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.5;
+.config, .users, .statusBar{
+  padding: 48px 32px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  width: 100%;
+  height: 600px;
 }
 
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
+.statusBar{
+  width: 100%;
+  height: auto;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
+.config{
+  margin-right: 16px;  
 }
 
-@media (prefers-color-scheme: dark) {
-  .card,
-  .footer {
-    border-color: #222;
-  }
-  .code {
-    background: #111;
-  }
-  .logo img {
-    filter: invert(1);
-  }
+.configList{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 8px;
+}
+
+.titleSection{
+  width: 100%;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title{
+  text-align: left;
+}
+
+.btnContainer{
+  display: flex;
+}
+
+.edit, .save, .cancel{
+  font-size: 10px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cancel{
+  padding-right: 0;
+}
+
+.save{
+  background-color: white;
+  color: black;
+  opacity: 0.5;
+}
+
+.save-valid{
+  opacity: 1;
+}
+
+.edit{
+  background-color: rgba(255,255,255,0.1);
+}
+
+.edit:hover{
+  background-color: rgba(255,255,255,0.15);
+}
+
+.fieldContainer{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.field{
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 12px;
+  outline: none;
+  opacity: .5;
+}
+
+.field:focus{
+  border: 1px solid rgba(255,255,255,0.65);
+}
+
+.field.field-changed{
+  border-color: rgb(255, 221, 0);
+}
+
+.field.field-invalid{
+  border-color: red;
+}
+
+.config-editing .field{
+  opacity: 1;
+}
+
+.fieldContainer label{
+  color: white;
+  margin-bottom: 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.fieldContainer label span{
+  font-size: 14px;
+  margin-left: 8px;
 }
