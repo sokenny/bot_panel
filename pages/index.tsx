@@ -14,7 +14,7 @@ type BotConfig = {
   start_gap_percentage: number;
   max_weight_allocation: number;
   leverage: number;
-} | null;
+};
 
 const hardCodedConfig: BotConfig = {
   pair: "BTCUSDT",
@@ -28,6 +28,35 @@ const hardCodedConfig: BotConfig = {
   max_weight_allocation: 1,
   leverage: 10,
 };
+
+
+type TUser = {
+  id: string | number;
+  email: string;
+  keys: {
+    api_key: string;
+    api_secret: string;
+  }
+}
+
+const users: TUser[] = [
+  {
+      id: 1,
+      email: "juanchaher99@gmail.com",
+      keys: {
+          "api_key": "",
+          "api_secret": ""
+      }
+  },
+  {
+      id: 2,
+      email: "info.proto.id@gmail.com",
+      keys: {
+          "api_key": "",
+          "api_secret": ""
+      }
+  }
+]
 
 const Home: NextPage = () => {
 
@@ -48,7 +77,7 @@ const Home: NextPage = () => {
         <section>
           <div>
             <BotConfig config={botConfig} setConfig={setBotConfig} />
-            <Users />
+            <Users users={users} />
           </div>
           <div className={styles.statusBar}></div>
         </section>
@@ -59,7 +88,7 @@ const Home: NextPage = () => {
   )
 }
 
-const BotConfig = ({config, setConfig}) => {
+const BotConfig:React.FC<{config: BotConfig, setConfig: any}> = ({config, setConfig}) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const configBeforeEditingStarts = useRef<BotConfig>(config);
@@ -82,6 +111,12 @@ const BotConfig = ({config, setConfig}) => {
     return somethingChanged() && validateData();
   }
 
+  function handleClickEdit() {
+    if(confirm("By proceeding you will enter edit mode.")){
+      setEditing(true);
+    }
+  }
+
   function revertEditing() {
     setConfig(configBeforeEditingStarts.current);
     setEditing(false);
@@ -100,14 +135,16 @@ const BotConfig = ({config, setConfig}) => {
     return positionStructureIsValid();
   }
 
-  function saveConfig() {
-    if (!validateData(config)) {
-      alert("Invalid position structure");
-      return;
+  function handleClickSave() {
+    if(confirm("By proceeding you will save the current configuration.")){
+      if (!validateData()) {
+        alert("Invalid position structure");
+        return;
+      }
+      setEditing(false);
+      configBeforeEditingStarts.current = config;
+      alert("Saved");
     }
-    setEditing(false);
-    configBeforeEditingStarts.current = config;
-    alert("Saved");
   }
 
   return (
@@ -121,7 +158,7 @@ const BotConfig = ({config, setConfig}) => {
               <div className={styles.btnContainer}>
                 <div 
                 className={`${styles.save} ${canSave() ? styles['save-valid'] : ''}`}
-                onClick={saveConfig}
+                onClick={handleClickSave}
                 >
                   SAVE
                 </div>
@@ -133,7 +170,7 @@ const BotConfig = ({config, setConfig}) => {
               
             ) : (
               <div className={styles.edit}
-              onClick={() => setEditing(!editing)}
+              onClick={handleClickEdit}
               >EDIT</div>
             )
               }
@@ -206,7 +243,7 @@ const BotConfig = ({config, setConfig}) => {
             </div>
             
             <div className={styles.fieldContainer}>
-              <label>Position Structure
+              <label>Position Struc.
                 <span>🏗️</span>
               </label>
               <input disabled={!editing} 
@@ -216,7 +253,7 @@ const BotConfig = ({config, setConfig}) => {
             </div>
             
             <div className={styles.fieldContainer}>
-              <label>Start Gap Percentage
+              <label>Start Gap Perc.
                 <span>⏩</span>
               </label>
               <input disabled={!editing} 
@@ -226,7 +263,7 @@ const BotConfig = ({config, setConfig}) => {
             </div>
             
             <div className={styles.fieldContainer}>
-              <label>Max Weight Allocation
+              <label>Max Weight Alloc.
                 <span>🏋️</span>
               </label>
               <input disabled={!editing} 
@@ -249,7 +286,7 @@ const BotConfig = ({config, setConfig}) => {
   )
 }
 
-const Users = () => {
+const Users:React.FC<{users: User[]}> = ({users}) => {
 
   const [editing, setEditing] = useState<boolean>(false);
 
@@ -261,9 +298,22 @@ const Users = () => {
             <div className={styles.title}>Users</div>
             <div className={styles.edit}
               onClick={() => setEditing(!editing)}
-              >EDIT</div>
+              >ADD</div>
+          </div>
+          <div className={styles.usersList}>
+            {users.map((user) => (
+              <User user={user} key={user.id} />
+            ))}
           </div>
         </section>
+  )
+}
+
+const User:React.FC<{user: TUser}> = ({user}) => {
+  return (
+    <div className={styles.User} key={user.id}>
+      <div>{user.email}</div> <div className={styles.edit}>edit</div>
+    </div>
   )
 }
 
