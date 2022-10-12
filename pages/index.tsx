@@ -1,20 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { BotConfig, IUser } from '../types'
 import { useEffect, useRef, useState } from 'react'
 import styles from '../styles/Home.module.css'
-
-type BotConfig = {
-  pair: string;
-  strategy: "reversion" | "tracing-long" | "tracing-short";
-  operation_expiry_time: number;
-  cci_peak: number;
-  stop_loss: number;
-  take_profit: number;
-  position_structure: string;
-  start_gap_percentage: number;
-  max_weight_allocation: number;
-  leverage: number;
-};
 
 const hardCodedConfig: BotConfig = {
   pair: "BTCUSDT",
@@ -29,17 +17,7 @@ const hardCodedConfig: BotConfig = {
   leverage: 10,
 };
 
-
-type TUser = {
-  id: string | number;
-  email: string;
-  keys: {
-    api_key: string;
-    api_secret: string;
-  }
-}
-
-const users: TUser[] = [
+const users: IUser[] = [
   {
       id: 1,
       email: "juanchaher99@gmail.com",
@@ -79,7 +57,7 @@ const Home: NextPage = () => {
             <BotConfig config={botConfig} setConfig={setBotConfig} />
             <Users users={users} />
           </div>
-          <div className={styles.statusBar}></div>
+          {/* <div className={styles.statusBar}></div> */}
         </section>
       </main>
 
@@ -135,15 +113,27 @@ const BotConfig:React.FC<{config: BotConfig, setConfig: any}> = ({config, setCon
     return positionStructureIsValid();
   }
 
-  function handleClickSave() {
+  async function handleClickSave() {
     if(confirm("By proceeding you will save the current configuration.")){
       if (!validateData()) {
         alert("Invalid position structure");
         return;
       }
+
+      await fetch('/api/config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+      })
+      .then((res) => res.text())
+      .then((data) => {
+        console.log(data);
+      })
+
       setEditing(false);
       configBeforeEditingStarts.current = config;
-      alert("Saved");
     }
   }
 
@@ -288,7 +278,9 @@ const BotConfig:React.FC<{config: BotConfig, setConfig: any}> = ({config, setCon
 
 const Users:React.FC<{users: User[]}> = ({users}) => {
 
-  const [editing, setEditing] = useState<boolean>(false);
+  function handleClickAdd(){
+    alert("TODO: Add user")
+  }
 
   return (
     <section
@@ -297,7 +289,7 @@ const Users:React.FC<{users: User[]}> = ({users}) => {
           <div className={styles.titleSection}>
             <div className={styles.title}>Users</div>
             <div className={styles.edit}
-              onClick={() => setEditing(!editing)}
+              onClick={handleClickAdd}
               >ADD</div>
           </div>
           <div className={styles.usersList}>
@@ -312,7 +304,11 @@ const Users:React.FC<{users: User[]}> = ({users}) => {
 const User:React.FC<{user: TUser}> = ({user}) => {
   return (
     <div className={styles.User} key={user.id}>
-      <div>{user.email}</div> <div className={styles.edit}>edit</div>
+      <div>{user.email}</div> 
+      <div className={styles.btns}>
+        <div className={styles.primary}>logs</div>
+        <div className={styles.edit}>edit</div>
+      </div>
     </div>
   )
 }
