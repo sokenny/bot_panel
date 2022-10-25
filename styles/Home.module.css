@@ -200,7 +200,6 @@
   opacity: 1;
 }
 
-/* TODO adapt for mobile */
 @media (max-width: 1000px) {
   .main>section>div:first-child{
     flex-direction: column;

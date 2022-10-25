@@ -79,7 +79,7 @@ const Home: NextPage<{config: BotConfig}> = ({config}) => {
       <main className={styles.main}>
         <div className={styles.status}>
           <div>Status: </div>
-          {/* TODO poner un circulito titilando */}
+          {/* TODO-p3 poner un circulito titilando */}
           <div>All systems normal</div>
         </div>
         <section>

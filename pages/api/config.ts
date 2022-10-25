@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'POST') {
-        // TODO register the update of the config in config history
+        // TODO-p2 register the update of the config in config history
         const botConfig = await Config.findOne();
         Object.keys(req.body).forEach(key => {
             botConfig[key] = req.body[key];
