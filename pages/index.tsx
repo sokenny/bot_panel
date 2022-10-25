@@ -437,7 +437,7 @@ const User: React.FC<{ user: IUser }> = ({ user }) => {
 };
 
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/config", {
+  const res = await fetch(process.env.NEXT_PUBLIC_APP_URL+"/api/config", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
