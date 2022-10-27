@@ -44,9 +44,9 @@
 
 .configList{
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: 8px;
+    grid-template-columns: 48% 48%;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 4%;
 }
 
 .titleSection{
