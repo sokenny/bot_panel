@@ -348,11 +348,12 @@ const BotConfig: React.FC<{ config: BotConfig; setConfig: any }> = ({
             onChange={(e) =>
               setConfig({
                 ...config,
-                start_gap_percentage: parseInt(e.target.value),
+                start_gap_percentage: parseFloat(e.target.value),
               })
             }
             name="start_gap_percentage"
             type="number"
+            step="0.1"
             value={config.start_gap_percentage}
           />
         </div>
