@@ -2,33 +2,18 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { BotConfig, IUser } from "../types";
 import { useEffect, useRef, useState } from "react";
+import User from "../components/User";
 import styles from "../styles/Home.module.css";
 
-const users: IUser[] = [
-  {
-    id: 1,
-    email: "juanchaher99@gmail.com",
-    keys: {
-      api_key: "",
-      api_secret: "",
-    },
-  },
-  {
-    id: 2,
-    email: "info.proto.id@gmail.com",
-    keys: {
-      api_key: "",
-      api_secret: "",
-    },
-  },
-];
-
-const Home: NextPage<{config: BotConfig}> = ({config}) => {
+const Home: NextPage<{ config: BotConfig; users: IUser[] }> = ({
+  config,
+  users,
+}) => {
   const [botConfig, setBotConfig] = useState<BotConfig>(config);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
 
-  function handleLogin(e:any) {
+  function handleLogin(e: any) {
     e.preventDefault();
 
     fetch("/api/login", {
@@ -106,8 +91,11 @@ const BotConfig: React.FC<{ config: BotConfig; setConfig: any }> = ({
     }
   }, [editing]);
 
-  function hasChanged(key:string) {
-    return configBeforeEditingStarts.current[key as keyof BotConfig] !== config[key as keyof BotConfig];  
+  function hasChanged(key: string) {
+    return (
+      configBeforeEditingStarts.current[key as keyof BotConfig] !==
+      config[key as keyof BotConfig]
+    );
   }
 
   function somethingChanged() {
@@ -201,12 +189,14 @@ const BotConfig: React.FC<{ config: BotConfig; setConfig: any }> = ({
         )}
       </div>
       <div className={styles.configList}>
+        {/* TODO-p2 crear un component configItem y un objeto que contenga los detalles de cada item asi imprimimos todo en un .map */}
         <div className={styles.fieldContainer}>
           <label>
             Pair
             <span>💰</span>
           </label>
           <input
+          style={{position: "absolute", top: "0"}}
             disabled={!editing}
             className={`${styles.field} ${
               hasChanged("pair") ? styles["field-changed"] : ""
@@ -418,38 +408,36 @@ const Users: React.FC<{ users: IUser[] }> = ({ users }) => {
       </div>
       <div className={styles.usersList}>
         {users.map((user) => (
-          <User user={user} key={user.id} />
+          <User user={user} key={user._id} />
         ))}
       </div>
     </section>
   );
 };
 
-const User: React.FC<{ user: IUser }> = ({ user }) => {
-  return (
-    <div className={styles.User} key={user.id}>
-      <div>{user.email}</div>
-      <div className={styles.btns}>
-        <div className={styles.primary}>logs</div>
-        <div className={styles.edit}>edit</div>
-      </div>
-    </div>
-  );
-};
-
 export async function getServerSideProps() {
-  const res = await fetch(process.env.NEXT_PUBLIC_APP_URL+"/api/config", {
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Password": process.env.NEXT_PUBLIC_PASSWORD || "",
+  };
+  const configRes = await fetch(
+    process.env.NEXT_PUBLIC_APP_URL + "/api/config",
+    {
+      method: "GET",
+      headers,
+    }
+  );
+  const usersRes = await fetch(process.env.NEXT_PUBLIC_APP_URL + "/api/users", {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Password": process.env.NEXT_PUBLIC_PASSWORD || ""
-    },
+    headers,
   });
-  const config = await res.json();
+  const config = await configRes.json();
+  const users = await usersRes.json();
 
   return {
     props: {
       config,
+      users: users,
     },
   };
 }

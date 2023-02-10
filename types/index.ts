@@ -12,8 +12,9 @@ export interface BotConfig {
   };
 
   export interface IUser {
-    id: string | number;
+    _id: string | number;
     email: string;
+    ideal_trade_amount: number;
     keys: {
       api_key: string;
       api_secret: string;

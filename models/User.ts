@@ -2,12 +2,16 @@ import mongoose, {Schema, model} from "mongoose";
 import { IUser as UserType } from "../types";
 
 const UserSchema = new Schema<UserType>({
-    id: {
+    _id: {
         type: String || Number,
         required: true
     },
     email: {
         type: String,
+        required: true
+    },
+    ideal_trade_amount: {
+        type: Number,
         required: true
     },
     keys: {
@@ -19,7 +23,7 @@ const UserSchema = new Schema<UserType>({
             type: String,
             required: true
         }
-    }
+    },
 });
 
 const User = mongoose.models.User || model<UserType>('User', UserSchema);
